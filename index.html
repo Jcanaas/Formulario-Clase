@@ -184,6 +184,7 @@
             <div class="message" id="message"></div>
         </form>
     </div>
+    <p>El que no tenga cuenta que se cree una cuenta de github</p>
 
     <script>
         document.getElementById('registroForm').addEventListener('submit', async function(e) {
@@ -193,20 +194,16 @@
             const loading = document.getElementById('loading');
             const message = document.getElementById('message');
             
-            // Ocultar mensaje previo
             message.style.display = 'none';
             message.className = 'message';
             
-            // Deshabilitar botón y mostrar loading
             button.disabled = true;
             loading.style.display = 'block';
             
-            // Obtener los valores del formulario
             const nombreCompleto = document.getElementById('nombreCompleto').value;
             const usuario = document.getElementById('usuario').value;
             const email = document.getElementById('email').value;
             
-            // Preparar los datos para enviar
             const datos = {
                 nombreCompleto: nombreCompleto,
                 usuario: usuario,
@@ -227,7 +224,6 @@
                     message.className = 'message success';
                     message.style.display = 'block';
                     
-                    // Limpiar el formulario
                     this.reset();
                 } else {
                     throw new Error('Error en la respuesta del servidor');
@@ -238,7 +234,6 @@
                 message.className = 'message error';
                 message.style.display = 'block';
             } finally {
-                // Habilitar botón y ocultar loading
                 button.disabled = false;
                 loading.style.display = 'none';
             }
@@ -246,3 +241,4 @@
     </script>
 </body>
 </html>
+
