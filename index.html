@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #e4e4e4;
+        }
+
+        .container {
+            background: rgba(30, 30, 46, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #64ffda;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b8b8d1;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(22, 33, 62, 0.6);
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            border-radius: 10px;
+            color: #e4e4e4;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #64ffda;
+            background: rgba(22, 33, 62, 0.8);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+        }
+
+        input::placeholder {
+            color: #6b6b8d;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #4a4a6a;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: #64ffda;
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .loading::after {
+            content: 'Enviando...';
+            color: #64ffda;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulario de Registro</h1>
+        <form id="registroForm">
+            <div class="form-group">
+                <label for="nombreCompleto">Nombre Completo</label>
+                <input 
+                    type="text" 
+                    id="nombreCompleto" 
+                    name="nombreCompleto" 
+                    placeholder=""
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input 
+                    type="text" 
+                    id="usuario" 
+                    name="usuario" 
+                    placeholder=""
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder=""
+                    required
+                >
+            </div>
+
+            <button type="submit">Enviar Formulario</button>
+            
+            <div class="loading" id="loading"></div>
+            <div class="message" id="message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('button[type="submit"]');
+            const loading = document.getElementById('loading');
+            const message = document.getElementById('message');
+            
+            // Ocultar mensaje previo
+            message.style.display = 'none';
+            message.className = 'message';
+            
+            // Deshabilitar botón y mostrar loading
+            button.disabled = true;
+            loading.style.display = 'block';
+            
+            // Obtener los valores del formulario
+            const nombreCompleto = document.getElementById('nombreCompleto').value;
+            const usuario = document.getElementById('usuario').value;
+            const email = document.getElementById('email').value;
+            
+            // Preparar los datos para enviar
+            const datos = {
+                nombreCompleto: nombreCompleto,
+                usuario: usuario,
+                email: email
+            };
+            
+            try {
+                const response = await fetch('https://hook.eu2.make.com/pfr4omvq8e154wfn8pemh2ynlivk5fvg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                if (response.ok) {
+                    message.textContent = 'Formulario enviado con éxito';
+                    message.className = 'message success';
+                    message.style.display = 'block';
+                    
+                    // Limpiar el formulario
+                    this.reset();
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                message.textContent = 'Error al enviar el formulario. Por favor, intenta de nuevo.';
+                message.className = 'message error';
+                message.style.display = 'block';
+            } finally {
+                // Habilitar botón y ocultar loading
+                button.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
